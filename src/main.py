@@ -1,23 +1,29 @@
 from scanner.scanner import DesktopScanner
+from metadata.metadata import FileMetadata
 
 
 def main():
-    print("=" * 50)
-    print(" Smart Desktop Organizer ")
-    print("=" * 50)
+    print("=" * 60)
+    print("          Smart Desktop Organizer")
+    print("=" * 60)
 
     scanner = DesktopScanner(".")
+    metadata = FileMetadata()
 
     files = scanner.scan()
 
     print(f"\nFound {len(files)} files\n")
 
     for file in files:
-        print(f"File Name : {file.name}")
-        print(f"Location  : {file.parent}")
-        print(f"Extension : {file.suffix if file.suffix else 'No Extension'}")
-        print(f"Size      : {file.stat().st_size} bytes")
-        print("-" * 50)
+        info = metadata.get_info(file)
+
+        print(f"File Name : {info['name']}")
+        print(f"Extension : {info['extension']}")
+        print(f"Size      : {info['size']} bytes")
+        print(f"Created   : {info['created']}")
+        print(f"Modified  : {info['modified']}")
+        print(f"Location  : {info['location']}")
+        print("-" * 60)
 
 
 if __name__ == "__main__":
