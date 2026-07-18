@@ -1,5 +1,6 @@
 from pathlib import Path
 from datetime import datetime
+from models.file_info import FileInfo
 
 
 class FileMetadata:
@@ -8,17 +9,15 @@ class FileMetadata:
     def get_info(self, file_path):
         file_path = Path(file_path)
 
-        file_info = {
-            "name": file_path.name,
-            "extension": file_path.suffix if file_path.suffix else "No Extension",
-            "size": file_path.stat().st_size,
-            "created": datetime.fromtimestamp(
+        return FileInfo(
+            name=file_path.name,
+            extension=file_path.suffix if file_path.suffix else "No Extension",
+            size=file_path.stat().st_size,
+            created=datetime.fromtimestamp(
                 file_path.stat().st_ctime
             ).strftime("%d-%b-%Y %I:%M %p"),
-            "modified": datetime.fromtimestamp(
+            modified=datetime.fromtimestamp(
                 file_path.stat().st_mtime
             ).strftime("%d-%b-%Y %I:%M %p"),
-            "location": str(file_path.parent)
-        }
-
-        return file_info
+            location=str(file_path.parent)
+        )
