@@ -1,6 +1,7 @@
 from scanner.scanner import DesktopScanner
 from metadata.metadata import FileMetadata
 from services.categorizer import FileTypeCategorizer
+from services.statistics import FolderStatistics
 
 
 def main():
@@ -11,13 +12,20 @@ def main():
     scanner = DesktopScanner(".")
     metadata = FileMetadata()
     categorizer = FileTypeCategorizer()
+    statistics = FolderStatistics()
 
+    # Scan all files
     files = scanner.scan()
 
     print(f"\nFound {len(files)} files\n")
 
+    # Store FileInfo objects
+    file_infos = []
+
     for file in files:
         info = metadata.get_info(file)
+        file_infos.append(info)
+
         category = categorizer.get_category(info.extension)
 
         print(f"File Name : {info.name}")
@@ -28,6 +36,9 @@ def main():
         print(f"Modified  : {info.modified}")
         print(f"Location  : {info.location}")
         print("-" * 60)
+
+    # Generate statistics using FileInfo objects
+    statistics.generate_statistics(file_infos)
 
 
 if __name__ == "__main__":
